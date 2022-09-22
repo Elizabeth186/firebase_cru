@@ -50,7 +50,7 @@ const Agregar = (props) => {
         />
       </View>
 
-      {/* Email Input */}
+      {/* description Input */}
       <View style={styles.inputGroup}>
         <TextInput
           placeholder="Descripcion"

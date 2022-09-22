@@ -7,23 +7,26 @@ import Lista from './Lista';
 const Detalles =(props)=> {
 
     const initialState = {
+        id: "",
         nombre: "",
         descripcion: "",
 
       };
     
-  const [list, setlist] = useState(initialState);
+  const [list, setList] = useState(initialState);
   const [loading, setLoading] = useState(true);
 
   const handleTextChange = (value, prop) => {
-    setlist({ ...list, [prop]: value });
+    setList({ ...list, [prop]: value });
   };
 
   const getItemById = async (id) => {
+    console.log("sha llego" + id);
+    
     const dbRef = firebase.db.collection("Productos").doc(id);
     const doc = await dbRef.get();
     const list = doc.data();
-    setlist({ ...list, id: doc.id });
+    setList({ ...list, id: doc.id });
     setLoading(false);
   };
 
@@ -56,7 +59,7 @@ const Detalles =(props)=> {
       nombre: list.nombre,
       descripcion: list.descripcion,
     });
-    setlist(initialState);
+    setList(initialState);
     props.navigation.navigate("Lista");
   };
 
@@ -74,9 +77,11 @@ const Detalles =(props)=> {
 
 
 
+
   return (
     <ScrollView style={styles.container}>
-    <View>
+    <View >
+      <Text style={styles.txtstyle}>Nombre del producto:</Text>
       <TextInput
         placeholder="Nombre"
         autoCompleteType="nombre"
@@ -85,25 +90,27 @@ const Detalles =(props)=> {
         onChangeText={(value) => handleTextChange(value, "nombre")}
       />
     </View>
-    <View>
+    <View >
+    <Text style={styles.txtstyle}>Descripcion del producto:</Text>
       <TextInput
         autoCompleteType="Descripcion"
         placeholder="Descripcion"
         style={styles.inputGroup}
         value={list.descripcion}
+        numberOfLines={4}
         onChangeText={(value) => handleTextChange(value, "descripcion")}
       />
     </View>
      
     <View style={styles.btn}>
       <Button
-        title="Delete"
-        onPress={() => openConfirmationAlert('Eliminado')}
+        title="Eliminar"
+        onPress={() => deleteItem()}
         color="red"
       />
     </View>
     <View style={styles.btn}>
-      <Button title="Update" onPress={() => updateList()} color="#19AC52" />
+      <Button title="Actualizar" onPress={() => updateList()} color="#19AC52" />
     </View>
   </ScrollView>
   );
@@ -112,7 +119,26 @@ const Detalles =(props)=> {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    padding: 35,
+  },
+  inputGroup: {
+    flex: 1,
+    padding: 0,
+    marginBottom: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: "#cccccc",
+  },
+  txtstyle: {
+    fontSize: 16,
+    padding: 20,
+    fontWeight: "bold",
+  },
+  btn: {
+    fontSize: 16,
+    padding: 12,
+    marginTop: 20,
+    fontWeight: "bold",
+    backgroundColor: '#D3D3D3'
   },
 });
 
